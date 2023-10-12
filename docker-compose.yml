@@ -1,0 +1,79 @@
+version: "3"
+services:
+  sanic:
+    build:
+      context: .
+    container_name: cube_python_sanic_sanic
+    environment:
+      - CUBE_SAMPLE_MYSQL=mysql+aiomysql://root:root@mysql/test
+      - OTEL_SERVICE_NAME=cube_sample_python_sanic
+      - OTEL_EXPORTER_OTLP_COMPRESSION=gzip
+
+      # print traces on console
+      - OTEL_LOG_LEVEL=debug
+      # send traces to CubeAPM
+      # - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://host.docker.internal:4317
+
+    depends_on:
+      - mysql
+      - redis
+      - kafka
+
+  mysql:
+    image: mysql:8.0
+    container_name: cube_python_sanic_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=test
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:alpine3.18
+    container_name: cube_python_sanic_redis
+
+  nginx:
+    image: nginx:1.24.0
+    container_name: cube_python_sanic_nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - sanic
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: cube_python_sanic_kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:4.0.0
+    depends_on:
+      - kafka
+    ports:
+      - 19000:9000
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+
+volumes:
+  mysql:
