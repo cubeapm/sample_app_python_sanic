@@ -33,7 +33,8 @@ def instrument_app(app: Sanic):
     async def on_request(req: Request):
         context.attach(extract(req.headers))
         span = tracer.start_span(
-            req.method + ' /' + req.route.path,
+            req.method + ' ' + (('/' + req.route.path)
+                                if req.route else req.path),
             kind=trace.SpanKind.SERVER,
         )
         activation = trace.use_span(span, end_on_exit=True)
@@ -51,5 +52,6 @@ def instrument_app(app: Sanic):
 
     @app.signal('http.lifecycle.exception')
     async def on_exception(request:  Request, exception: Exception):
-        request.ctx.cubeapm[SPAN_KEY].record_exception(exception)
-        request.ctx.cubeapm[SPAN_KEY].set_status(Status(StatusCode.ERROR))
+        if hasattr(request.ctx, 'cubeapm'):
+            request.ctx.cubeapm[SPAN_KEY].record_exception(exception)
+            request.ctx.cubeapm[SPAN_KEY].set_status(Status(StatusCode.ERROR))
