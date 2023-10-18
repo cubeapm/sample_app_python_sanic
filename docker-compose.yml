@@ -13,7 +13,8 @@ services:
       - OTEL_LOG_LEVEL=debug
       # send traces to CubeAPM
       # - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://host.docker.internal:4317
-
+    ports:
+      - "8000:8000"
     depends_on:
       - mysql
       - redis
@@ -33,16 +34,6 @@ services:
   redis:
     image: redis:alpine3.18
     container_name: cube_python_sanic_redis
-
-  nginx:
-    image: nginx:1.24.0
-    container_name: cube_python_sanic_nginx
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - "80:80"
-    depends_on:
-      - sanic
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
