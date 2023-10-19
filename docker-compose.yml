@@ -19,6 +19,7 @@ services:
       - mysql
       - redis
       - kafka
+    restart: always
 
   mysql:
     image: mysql:8.0
@@ -27,7 +28,7 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=test
     volumes:
-      - mysql:/var/lib/mysql
+      - cube_python_sanic_mysql:/var/lib/mysql
     ports:
       - "3306:3306"
 
@@ -59,6 +60,7 @@ services:
 
   kafdrop:
     image: obsidiandynamics/kafdrop:4.0.0
+    container_name: cube_python_sanic_kafdrop
     depends_on:
       - kafka
     ports:
@@ -67,4 +69,4 @@ services:
       KAFKA_BROKERCONNECT: kafka:29092
 
 volumes:
-  mysql:
+  cube_python_sanic_mysql:

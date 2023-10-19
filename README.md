@@ -21,7 +21,7 @@ alembic upgrade head
 
 Sanic app will now be available at `http://localhost:8000`.
 
-The app has various API endpoints to demonstrate OpenTelemetry integrations with Redis, MySQL, Kafka, etc. Check out [server.py](server.py) for the list of API endpoint. Hitting an API endpoint will generate the corresponding traces. Traces are printed to console (where docker compose is running) by default. If you want to send traces to a backend tool, comment out the `OTEL_LOG_LEVEL` line and uncomment the `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` line in [docker-compose.yml](docker-compose.yml).
+The app has various API endpoints to demonstrate OpenTelemetry integrations with Redis, MySQL, Kafka, etc. Check out [server.py](server.py) for the list of API endpoints. Hitting an API endpoint will generate the corresponding traces. Traces are printed to console (where docker compose is running) by default. If you want to send traces to a backend tool, comment out the `OTEL_LOG_LEVEL` line and uncomment the `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` line in [docker-compose.yml](docker-compose.yml).
 
 ## Contributing
 
