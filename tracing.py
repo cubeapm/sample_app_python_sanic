@@ -3,7 +3,7 @@
 
 import os
 from opentelemetry import trace, context
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.propagate import extract
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (

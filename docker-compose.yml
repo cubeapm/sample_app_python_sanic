@@ -12,7 +12,7 @@ services:
       # print traces on console
       - OTEL_LOG_LEVEL=debug
       # send traces to CubeAPM
-      # - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://host.docker.internal:4317
+      # - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://host.docker.internal:4318/v1/traces
     ports:
       - "8000:8000"
     depends_on:
