@@ -89,7 +89,7 @@ async def api(request):
 
 @app.post("/user")
 # POST method for INSERT into MySQL
-# curl -X POST 'http://localhost/user' -d '{"name":"foo"}'
+# curl -X POST 'http://localhost:8000/user' -d '{"name":"foo"}'
 async def create_user(request):
     session = request.ctx.session
     async with session.begin():

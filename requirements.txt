@@ -1,5 +1,6 @@
 aiofiles==23.2.1
 aiomysql==0.2.0
+alembic==1.13.1
 asgiref==3.8.1
 async-timeout==4.0.3
 certifi==2024.2.2
@@ -26,6 +27,7 @@ opentelemetry-instrumentation==0.45b0
 opentelemetry-instrumentation-asgi==0.45b0
 opentelemetry-instrumentation-asyncio==0.45b0
 opentelemetry-instrumentation-aws-lambda==0.45b0
+opentelemetry-instrumentation-confluent-kafka==0.45b0
 opentelemetry-instrumentation-dbapi==0.45b0
 opentelemetry-instrumentation-logging==0.45b0
 opentelemetry-instrumentation-pymysql==0.45b0
