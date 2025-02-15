@@ -1,6 +1,7 @@
 import os
 import requests
 import socket
+import newrelic.agent
 from confluent_kafka import Producer, Consumer, KafkaError, KafkaException
 from contextvars import ContextVar
 from redis import Redis
@@ -14,6 +15,7 @@ from models import User
 
 app = Sanic("CubeAPMSampleApp")
 
+newrelic.agent.initialize()
 
 ## begin configure mysql ##
 engine = create_async_engine(os.environ['CUBE_SAMPLE_MYSQL'], echo=True)
