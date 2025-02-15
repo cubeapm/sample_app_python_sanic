@@ -1,3 +1,13 @@
+# OpenTelemetry Instrumentation
+
+This branch contains code for OpenTelemetry instrumentation.
+
+Hitting an API endpoint will generate the corresponding traces. Traces are printed to console (where docker compose is running) by default. If you want to send traces to a backend tool, comment out the `OTEL_LOG_LEVEL` line and uncomment the `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` line in [docker-compose.yml](docker-compose.yml).
+
+Refer the project README below for more details.
+
+---
+
 # Python Sanic Instrumentation
 
 This is a sample app to demonstrate how to instrument Python Sanic app with **New Relic** and **OpenTelemetry**. It contains source code for the Sanic app which interacts with various services like Redis, MySQL, Kafka, etc. to demonstrate tracing for these services. This repository has a docker compose file to set up all these services conveniently.

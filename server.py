@@ -10,9 +10,17 @@ from sanic.response import json, text
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
+from opentelemetry.instrumentation.confluent_kafka import ConfluentKafkaInstrumentor
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
+
 from models import User
+from tracing import instrument_app
+
 
 app = Sanic("CubeAPMSampleApp")
+instrument_app(app)
 
 
 ## begin configure mysql ##
@@ -44,6 +52,18 @@ kafka_producer.produce('sample_topic', b'raw_bytes')
 
 kafka_consumer = Consumer(
     {'bootstrap.servers': 'kafka:9092', 'group.id': 'foo', 'auto.offset.reset': 'smallest'})
+
+
+kafka_inst = ConfluentKafkaInstrumentor()
+kafka_producer = kafka_inst.instrument_producer(kafka_producer)
+kafka_consumer = kafka_inst.instrument_consumer(kafka_consumer)
+RedisInstrumentor().instrument()
+RequestsInstrumentor().instrument()
+SQLAlchemyInstrumentor().instrument(engine=engine.sync_engine,
+                                    enable_commenter=True, commenter_options={})
+# Additional instrumentation can be enabled by
+# following the docs for respective instrumentations at
+# https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation
 
 
 @app.get("/")
