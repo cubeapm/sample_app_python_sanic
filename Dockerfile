@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-CMD ["sanic", "server:app", "--host=0.0.0.0", "--port=8000", "--workers=4", "--debug", "--reload"]
+CMD ["ddtrace-run", "sanic", "server:app", "--host=0.0.0.0", "--port=8000", "--workers=4", "--debug", "--reload"]
