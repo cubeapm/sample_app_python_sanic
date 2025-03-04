@@ -8,6 +8,18 @@ For testing, **ngrok** can be used in place of load balancer. Run `ngrok http 31
 
 Refer the project README below for more details.
 
+## Troubleshooting
+
+If the app does not show up in CubeAPM after integration is done, add the below environment variables to check New Relic agent logs.
+
+```shell
+# Print New Relic agent logs on screen
+NEW_RELIC_LOG=stdout
+
+# Set New Relic agent log level to debug if needed to see detailed logs
+#NEW_RELIC_LOG_LEVEL=debug
+```
+
 ---
 
 # Python Sanic Instrumentation

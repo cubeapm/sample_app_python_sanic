@@ -10,6 +10,11 @@ services:
       - NEW_RELIC_HOST=<domain_of_cubeapm_server>
       - NEW_RELIC_APP_NAME=cube_sample_python_sanic_newrelic
       - NEW_RELIC_LICENSE_KEY=ABC4567890ABC4567890ABC4567890ABC4567890
+
+      # Print New Relic agent logs on screen
+      # - NEW_RELIC_LOG=stdout
+      # Set New Relic agent log level to debug if needed to see detailed logs
+      # - NEW_RELIC_LOG_LEVEL=debug
     ports:
       - "8000:8000"
     depends_on:
