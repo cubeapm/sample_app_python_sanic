@@ -9,10 +9,38 @@ from sanic.exceptions import SanicException
 from sanic.response import json, text
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from elasticapm.contrib.sanic import ElasticAPM
+# import logging
+import elasticapm.contrib.sanic.utils as apm_utils
 
 from models import User
 
+# If using ELASTIC_APM_LOG_FILE to check agent debug logs,
+# the following may need to be uncommented to see the logs.
+# logging.basicConfig()
+
+
+# Sanic recently changed the CookieJar interface, and that broke the Elastic agent.
+# The fix has already been merged into the ElasticAPM repo, but it hasn't been released yet.
+# This is a temporary patch until the next release of elastic-apm after v6.23.0.
+# Ref: https://github.com/elastic/apm-agent-python/pull/2190/files#diff-b4a325057bcab10ab8ad2ff6a47422ebd34e1583e8d207a2720d123f54e07bce
+def _patched_transform_response_cookie(cookies):
+    """Transform the Sanic's CookieJar instance into a Normal dictionary to build the context"""
+    # old sanic versions used to have an items() method
+    if hasattr(cookies, "items"):
+        return {k: {"value": v.value, "path": v["path"]} for k, v in cookies.items()}
+
+    try:
+        return {cookie.key: {"value": cookie.value, "path": cookie.path} for cookie in cookies.cookies}
+    except KeyError:
+        # cookies.cookies assumes Set-Cookie header will be there
+        return {}
+
+
+apm_utils._transform_response_cookie = _patched_transform_response_cookie
+
 app = Sanic("CubeAPMSampleApp")
+apm = ElasticAPM(app=app)
 
 
 ## begin configure mysql ##

@@ -1,3 +1,24 @@
+# Elastic Instrumentation
+
+This branch contains code for Elastic instrumentation.
+
+By default, hitting an API endpoint will generate a trace, which is sent to CubeAPM. This behavior is controlled via environment variables in [docker-compose.yml](docker-compose.yml).
+
+Refer the project README below for more details.
+
+## Troubleshooting
+
+If the app does not show up in CubeAPM after integration is done, add the below environment variables to check Elastic agent logs.
+
+```shell
+# Print Elastic agent logs on screen (also see wsgi.py for additional requirements)
+ELASTIC_APM_LOG_FILE=stdout
+# Set Elastic agent log level to debug if needed to see detailed logs
+#ELASTIC_APM_LOG_LEVEL=debug
+```
+
+---
+
 # Python Sanic Instrumentation
 
 This is a sample app to demonstrate how to instrument Python Sanic app with **New Relic** and **OpenTelemetry**. It contains source code for the Sanic app which interacts with various services like Redis, MySQL, Kafka, etc. to demonstrate tracing for these services. This repository has a docker compose file to set up all these services conveniently.
