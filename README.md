@@ -29,6 +29,8 @@ The code is organized into multiple branches. The main branch has the Sanic app 
 | Branch                                                                                         | Instrumentation | Code changes for instrumentation                                                                                |
 | ---------------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------- |
 | [main](https://github.com/cubeapm/sample_app_python_sanic/tree/main)         | None            | -                                                                                                               |
+| [datadog](https://github.com/cubeapm/sample_app_python_sanic/tree/datadog) | Datadog       | [main...datadog](https://github.com/cubeapm/sample_app_python_sanic/compare/main...datadog) |
+| [elastic](https://github.com/cubeapm/sample_app_python_sanic/tree/elastic)         | Elastic   | [main...elastic](https://github.com/cubeapm/sample_app_python_sanic/compare/main...elastic)         |
 | [newrelic](https://github.com/cubeapm/sample_app_python_sanic/tree/newrelic) | New Relic       | [main...newrelic](https://github.com/cubeapm/sample_app_python_sanic/compare/main...newrelic) |
 | [otel](https://github.com/cubeapm/sample_app_python_sanic/tree/otel)         | OpenTelemetry   | [main...otel](https://github.com/cubeapm/sample_app_python_sanic/compare/main...otel)         |
 
