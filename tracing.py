@@ -3,9 +3,10 @@
 
 import os
 from opentelemetry import trace, context
+from opentelemetry.semconv.resource import ResourceAttributes
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.propagate import extract
-from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace import TracerProvider, Resource
 from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
     ConsoleSpanExporter,
@@ -14,10 +15,13 @@ from opentelemetry.sdk.trace.export import (
 from opentelemetry.semconv.trace import SpanAttributes
 from opentelemetry.trace.status import Status, StatusCode
 from sanic import HTTPResponse, Request, Sanic
-
+from socket import gethostname
 
 def instrument_app(app: Sanic):
-    provider = TracerProvider()
+    provider = TracerProvider(resource=Resource({
+      ResourceAttributes.SERVICE_NAME: os.environ['OTEL_SERVICE_NAME'],
+      ResourceAttributes.HOST_NAME: gethostname() or 'UNSET',
+   }))
     if os.getenv('OTEL_LOG_LEVEL', '') == 'debug':
         processor = SimpleSpanProcessor(ConsoleSpanExporter())
     else:
