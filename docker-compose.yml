@@ -9,10 +9,11 @@ services:
       - OTEL_SERVICE_NAME=cube_sample_python_sanic_otel
       - OTEL_EXPORTER_OTLP_COMPRESSION=gzip
 
-      # print traces on console
+      # print traces and metrics on console
       - OTEL_LOG_LEVEL=debug
-      # send traces to CubeAPM
+      # send traces and metrics to CubeAPM
       # - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://host.docker.internal:4318/v1/traces
+      # - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://host.docker.internal:3130/api/metrics/v1/save/otlp
     ports:
       - "8000:8000"
     depends_on:
