@@ -8,8 +8,13 @@ services:
       - CUBE_SAMPLE_MYSQL=mysql+aiomysql://root:root@mysql/test
 
       - DD_SERVICE=cube_sample_python_sanic_datadog
-      # send traces to CubeAPM
-      - DD_TRACE_AGENT_URL=http://host.docker.internal:3130
+
+      # Send data to Datadog Agent
+      - DD_AGENT_HOST=datadog-agent
+
+      # Enable Runtime metrics
+      - DD_RUNTIME_METRICS_ENABLED=true
+      - DD_RUNTIME_METRICS_RUNTIME_ID_ENABLED=true
 
       # optional settings
       # - DD_ENV=myenv
@@ -26,7 +31,28 @@ services:
       - mysql
       - redis
       - kafka
+      - datadog-agent
     restart: always
+
+  datadog-agent:
+    image: gcr.io/datadoghq/agent:7.72.3
+    container_name: datadog-agent
+    environment:
+      # Required
+      - DD_API_KEY=<your_datadog_api_key>
+
+      # send metrics to CubeAPM
+      - DD_DD_URL=http://host.docker.internal:3130
+      # send traces to CubeAPM
+      - DD_APM_DD_URL=http://host.docker.internal:3130
+
+      # Accept traces and metrics from applications running outside the agent host
+      - DD_APM_NON_LOCAL_TRAFFIC=true
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
 
   mysql:
     image: mysql:8.0
