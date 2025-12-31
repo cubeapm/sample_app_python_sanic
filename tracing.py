@@ -28,6 +28,7 @@ from socket import gethostname
 def instrument_app(app: Sanic):
     resource = resources.Resource.create({
         resources.HOST_NAME: gethostname() or 'UNSET',
+        resources.PROCESS_PID : os.getpid(),
     })
 
     if os.getenv('OTEL_LOG_LEVEL', '') == 'debug':
